@@ -94,7 +94,7 @@ export function UsuariosTable() {
             Gerencie usuários e permissões do sistema
           </p>
         </div>
-        <Button variant="gradient" size="sm">
+        <Button variant="premium" size="sm">
           <Plus className="w-4 h-4 mr-2" />
           Novo Usuário
         </Button>

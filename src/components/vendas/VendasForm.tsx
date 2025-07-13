@@ -160,7 +160,7 @@ export function VendasForm() {
                 </div>
                 <div className="flex gap-2 items-end">
                   <Button 
-                    variant="gradient"
+                    variant="premium"
                     onClick={handleScanCamera}
                     disabled={isScanning}
                     size="lg"
@@ -314,7 +314,7 @@ export function VendasForm() {
 
               <Button
                 className="w-full"
-                variant="gradient"
+                variant="premium"
                 size="lg"
                 onClick={handleFinalizarVenda}
                 disabled={itensVenda.length === 0}

@@ -103,7 +103,7 @@ export function EstoqueTable() {
             <RefreshCw className="w-4 h-4 mr-2" />
             Atualizar
           </Button>
-          <Button variant="gradient" size="sm">
+          <Button variant="premium" size="sm">
             <TrendingUp className="w-4 h-4 mr-2" />
             Previsão IA
           </Button>

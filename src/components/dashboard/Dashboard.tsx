@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -64,7 +65,7 @@ export function Dashboard() {
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Atualizar
           </Button>
-          <Button variant="gradient" size="sm">
+          <Button variant="premium" size="sm">
             <Zap className="w-4 h-4 mr-2" />
             Insights IA
           </Button>
@@ -224,7 +225,7 @@ export function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <Button variant="gradient" className="justify-start">
+            <Button variant="premium" className="justify-start">
               <ShoppingCart className="w-4 h-4 mr-2" />
               Nova Venda
             </Button>
