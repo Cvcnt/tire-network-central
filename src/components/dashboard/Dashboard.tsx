@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MetricCard } from "./MetricCard";
@@ -15,6 +15,7 @@ import {
   Calendar,
   RefreshCw
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 // Mock data - em produção viria do Supabase
 const mockMetrics = {
@@ -37,12 +38,61 @@ const mockRecentSales = [
 
 export function Dashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsRefreshing(false);
+    toast({
+      title: "Dados atualizados",
+      description: "Dashboard foi atualizado com sucesso!",
+    });
+  };
+
+  const handleMetricClick = (metric: string) => {
+    switch (metric) {
+      case 'vendas':
+        navigate('/vendas');
+        break;
+      case 'estoque':
+        navigate('/estoque');
+        break;
+      case 'usuarios':
+        navigate('/usuarios');
+        break;
+      case 'relatorios':
+        navigate('/relatorios');
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleActionClick = (action: string) => {
+    switch (action) {
+      case 'nova-venda':
+        navigate('/vendas');
+        break;
+      case 'consultar-estoque':
+        navigate('/estoque');
+        break;
+      case 'gerenciar-usuarios':
+        navigate('/usuarios');
+        break;
+      case 'relatorios':
+        navigate('/relatorios');
+        break;
+      case 'insights-ia':
+        navigate('/insights');
+        break;
+      case 'ver-todas-vendas':
+        navigate('/vendas');
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -65,7 +115,7 @@ export function Dashboard() {
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Atualizar
           </Button>
-          <Button variant="premium" size="sm">
+          <Button variant="premium" size="sm" onClick={() => handleActionClick('insights-ia')}>
             <Zap className="w-4 h-4 mr-2" />
             Insights IA
           </Button>
@@ -81,6 +131,7 @@ export function Dashboard() {
           changeLabel="últimos 30 dias"
           icon={<DollarSign />}
           trend="up"
+          onClick={() => handleMetricClick('vendas')}
         />
         <MetricCard
           title="Vendas do Mês"
@@ -89,6 +140,7 @@ export function Dashboard() {
           changeLabel="vs mês anterior"
           icon={<ShoppingCart />}
           trend="up"
+          onClick={() => handleMetricClick('vendas')}
         />
         <MetricCard
           title="Ticket Médio"
@@ -97,6 +149,7 @@ export function Dashboard() {
           changeLabel="vs semana anterior"
           icon={<TrendingUp />}
           trend="down"
+          onClick={() => handleMetricClick('vendas')}
         />
         <MetricCard
           title="Estoque Baixo"
@@ -105,6 +158,7 @@ export function Dashboard() {
           changeLabel="produtos críticos"
           icon={<Package />}
           trend="up"
+          onClick={() => handleMetricClick('estoque')}
         />
       </div>
 
@@ -115,6 +169,7 @@ export function Dashboard() {
           value={mockMetrics.vendedoresAtivos}
           icon={<Users />}
           trend="neutral"
+          onClick={() => handleMetricClick('usuarios')}
         />
         <MetricCard
           title="Conversão do Mês"
@@ -122,6 +177,7 @@ export function Dashboard() {
           change={5.2}
           icon={<Target />}
           trend="up"
+          onClick={() => handleMetricClick('relatorios')}
         />
         <MetricCard
           title="Venda Hoje"
@@ -129,6 +185,7 @@ export function Dashboard() {
           change={18.7}
           icon={<Calendar />}
           trend="up"
+          onClick={() => handleMetricClick('vendas')}
         />
         <MetricCard
           title="Meta do Mês"
@@ -136,6 +193,7 @@ export function Dashboard() {
           change={3.1}
           icon={<BarChart3 />}
           trend="up"
+          onClick={() => handleMetricClick('relatorios')}
         />
       </div>
 
@@ -197,7 +255,8 @@ export function Dashboard() {
               {mockRecentSales.map((sale) => (
                 <div
                   key={sale.id}
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/50 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
+                  onClick={() => handleActionClick('ver-todas-vendas')}
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{sale.produto}</p>
@@ -211,7 +270,7 @@ export function Dashboard() {
                 </div>
               ))}
             </div>
-            <Button variant="ghost" className="w-full mt-4">
+            <Button variant="ghost" className="w-full mt-4" onClick={() => handleActionClick('ver-todas-vendas')}>
               Ver Todas as Vendas
             </Button>
           </CardContent>
@@ -225,19 +284,19 @@ export function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <Button variant="premium" className="justify-start">
+            <Button variant="premium" className="justify-start" onClick={() => handleActionClick('nova-venda')}>
               <ShoppingCart className="w-4 h-4 mr-2" />
               Nova Venda
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => handleActionClick('consultar-estoque')}>
               <Package className="w-4 h-4 mr-2" />
               Consultar Estoque
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => handleActionClick('gerenciar-usuarios')}>
               <Users className="w-4 h-4 mr-2" />
               Gerenciar Usuários
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => handleActionClick('relatorios')}>
               <BarChart3 className="w-4 h-4 mr-2" />
               Relatórios
             </Button>

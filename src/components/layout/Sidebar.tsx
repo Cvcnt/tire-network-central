@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { 
@@ -16,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const navigationItems = [
   { title: "Dashboard", url: "/", icon: BarChart3 },
@@ -32,8 +34,10 @@ const navigationItems = [
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [currentStore, setCurrentStore] = useState("Centro Automotivo SP");
   const location = useLocation();
   const currentPath = location.pathname;
+  const { toast } = useToast();
 
   const isActive = (path: string) => {
     if (path === "/") return currentPath === "/";
@@ -47,6 +51,25 @@ export function Sidebar() {
         ? "bg-primary text-primary-foreground shadow-md"
         : "text-muted-foreground hover:text-foreground hover:bg-accent"
     );
+
+  const handleStoreChange = () => {
+    const stores = ["Centro Automotivo SP", "Centro Automotivo RJ", "Centro Automotivo MG"];
+    const currentIndex = stores.indexOf(currentStore);
+    const nextStore = stores[(currentIndex + 1) % stores.length];
+    setCurrentStore(nextStore);
+    
+    toast({
+      title: "Loja alterada",
+      description: `Agora você está visualizando: ${nextStore}`,
+    });
+  };
+
+  const handleProfileConfig = () => {
+    toast({
+      title: "Configurar Perfil",
+      description: "Funcionalidade em desenvolvimento",
+    });
+  };
 
   return (
     <div className={cn(
@@ -84,8 +107,8 @@ export function Sidebar() {
               <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
               <span className="text-sm font-medium">Loja Ativa</span>
             </div>
-            <p className="text-sm text-muted-foreground">Centro Automotivo SP</p>
-            <Button variant="ghost" size="sm" className="w-full mt-2 text-xs">
+            <p className="text-sm text-muted-foreground">{currentStore}</p>
+            <Button variant="ghost" size="sm" className="w-full mt-2 text-xs" onClick={handleStoreChange}>
               Trocar Loja
             </Button>
           </div>
@@ -119,13 +142,13 @@ export function Sidebar() {
                 <p className="text-xs text-muted-foreground">Proprietário</p>
               </div>
             </div>
-            <Button variant="ghost" size="sm" className="w-full text-xs">
+            <Button variant="ghost" size="sm" className="w-full text-xs" onClick={handleProfileConfig}>
               Configurar Perfil
             </Button>
           </div>
         ) : (
           <div className="flex justify-center">
-            <div className="w-8 h-8 bg-gradient-success rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-success rounded-full flex items-center justify-center cursor-pointer" onClick={handleProfileConfig}>
               <span className="text-xs font-bold text-success-foreground">JS</span>
             </div>
           </div>
