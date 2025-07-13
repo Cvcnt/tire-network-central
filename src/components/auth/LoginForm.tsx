@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";  
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -15,9 +15,11 @@ import {
   Brain, 
   Shield, 
   Zap,
-  Crown,
+  Building2,
   Star,
-  Gem
+  Users,
+  BarChart3,
+  TrendingUp
 } from "lucide-react";
 
 export function LoginForm() {
@@ -29,23 +31,28 @@ export function LoginForm() {
   const [userPreferences, setUserPreferences] = useState({
     theme: "dark",
     aiAssistance: true,
-    notifications: true
+    notifications: true,
+    analytics: true,
+    multiStore: false
   });
   const { toast } = useToast();
 
-  // Simulação de IA para insights de login
+  // AI insights rotation
   useEffect(() => {
     const insights = [
-      "🧠 IA detectou padrão de acesso otimizado para seu perfil",
-      "⚡ Sistema preparado para performance máxima",
-      "🎯 Dashboard personalizado baseado em seu histórico",
-      "🚀 Previsões de vendas atualizadas em tempo real",
-      "💎 Experiência premium ativada para sua conta"
+      "🧠 Sistema IA otimizando performance para sua rede",
+      "📊 Dashboard inteligente preparado com seus KPIs",
+      "🎯 Previsões de vendas atualizadas em tempo real",
+      "🚀 Multi-lojas sincronizadas e operacionais",
+      "💼 Experiência premium ativada para gestores",
+      "📈 Analytics avançado detectando oportunidades",
+      "⚡ Performance otimizada para alta demanda",
+      "🔒 Segurança enterprise ativa e monitorada"
     ];
     
     const interval = setInterval(() => {
       setAiInsight(insights[Math.floor(Math.random() * insights.length)]);
-    }, 3000);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, []);
@@ -54,37 +61,56 @@ export function LoginForm() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simula autenticação com IA
-    setTimeout(() => {
+    try {
+      // Simulate authentication process
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       if (email && password) {
+        // Save user preferences
+        localStorage.setItem('userPreferences', JSON.stringify(userPreferences));
+        localStorage.setItem('aiAssistanceEnabled', userPreferences.aiAssistance.toString());
+        localStorage.setItem('userEmail', email);
+        
         toast({
-          title: "🎉 Login realizado com sucesso!",
-          description: "Bem-vindo ao TireSaaS Premium - IA ativada",
+          title: "🎉 Acesso autorizado com sucesso!",
+          description: "Bem-vindo ao TireSaaS Enterprise - Sistema IA ativo",
           variant: "default",
         });
         
-        // Salva preferências do usuário
-        localStorage.setItem('userPreferences', JSON.stringify(userPreferences));
-        localStorage.setItem('aiAssistanceEnabled', 'true');
+        // Redirect based on user type
+        const userType = email.includes('admin') ? 'admin' : 'manager';
+        setTimeout(() => {
+          window.location.href = userType === 'admin' ? "/usuarios" : "/";
+        }, 1000);
         
-        // Redirect para dashboard
-        window.location.href = "/";
       } else {
-        toast({
-          title: "❌ Erro no login",
-          description: "Verifique suas credenciais",
-          variant: "destructive",
-        });
+        throw new Error('Credenciais inválidas');
       }
+    } catch (error) {
+      toast({
+        title: "❌ Erro na autenticação",
+        description: "Verifique suas credenciais e tente novamente",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
-  const handleOAuthLogin = (provider: string) => {
+  const handleOAuthLogin = async (provider: string) => {
     toast({
       title: `🔐 Conectando com ${provider}`,
       description: "Autenticação OAuth em andamento...",
     });
+
+    // Simulate OAuth process
+    setTimeout(() => {
+      toast({
+        title: "✅ Conectado com sucesso",
+        description: `Autenticação ${provider} realizada`,
+        variant: "default",
+      });
+    }, 1500);
   };
 
   const togglePreference = (key: keyof typeof userPreferences) => {
@@ -94,9 +120,14 @@ export function LoginForm() {
     }));
   };
 
+  const handleDemoLogin = () => {
+    setEmail("demo@tiresaas.com");
+    setPassword("demo123");
+  };
+
   return (
     <div className="min-h-screen flex">
-      {/* Left Side - Premium Hero */}
+      {/* Left Side - Professional Hero */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <div className="w-full gradient-elegant relative">
           {/* Animated Background Elements */}
@@ -107,49 +138,54 @@ export function LoginForm() {
           </div>
           
           <div className="relative z-10 flex flex-col justify-center items-start p-12 h-full text-foreground">
-            <div className="flex items-center gap-4 mb-12 hover-glow-gold">
-              <div className="w-16 h-16 gradient-gold rounded-2xl flex items-center justify-center shadow-glow">
-                <Crown className="w-9 h-9 text-primary-foreground" />
+            <div className="flex items-center gap-4 mb-12 hover-glow-premium">
+              <div className="w-16 h-16 gradient-premium rounded-2xl flex items-center justify-center shadow-glow">
+                <Building2 className="w-9 h-9 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gradient-gold">TireSaaS</h1>
-                <p className="text-muted-foreground text-lg">Premium AI-Powered Management</p>
+                <h1 className="text-4xl font-bold text-gradient-premium">TireSaaS</h1>
+                <p className="text-muted-foreground text-lg">Enterprise Management System</p>
               </div>
             </div>
             
             <div className="space-y-8 max-w-lg">
               <h2 className="text-5xl font-bold leading-tight text-luxury">
-                Revolucione sua gestão com
-                <span className="text-gradient-gold"> Inteligência Artificial</span>
+                Gestão empresarial
+                <span className="text-gradient-premium"> com inteligência</span>
               </h2>
               
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Sistema completo com IA integrada para previsões, insights automáticos e gestão inteligente de múltiplas lojas.
+                Plataforma completa para redes de lojas com IA integrada, analytics avançado e controle centralizado multi-unidades.
               </p>
               
               <div className="grid grid-cols-1 gap-4">
                 <div className="flex items-center gap-4 p-5 glass-premium rounded-xl hover-lift-premium">
-                  <div className="w-3 h-3 bg-success rounded-full shadow-glow animate-glow-pulse"></div>
+                  <div className="w-3 h-3 bg-primary rounded-full shadow-glow animate-pulse"></div>
                   <Brain className="w-6 h-6 text-primary" />
-                  <span className="text-lg">IA Preditiva para Vendas e Estoque</span>
+                  <span className="text-lg">IA Preditiva e Analytics Avançado</span>
                 </div>
                 <div className="flex items-center gap-4 p-5 glass-premium rounded-xl hover-lift-premium">
-                  <div className="w-3 h-3 bg-success rounded-full shadow-glow animate-glow-pulse"></div>
-                  <Zap className="w-6 h-6 text-primary" />
-                  <span className="text-lg">Dashboard em Tempo Real com Insights</span>
+                  <div className="w-3 h-3 bg-primary rounded-full shadow-glow animate-pulse"></div>
+                  <BarChart3 className="w-6 h-6 text-primary" />
+                  <span className="text-lg">Dashboard Enterprise em Tempo Real</span>
                 </div>
                 <div className="flex items-center gap-4 p-5 glass-premium rounded-xl hover-lift-premium">
-                  <div className="w-3 h-3 bg-success rounded-full shadow-glow animate-glow-pulse"></div>
-                  <Gem className="w-6 h-6 text-primary" />
+                  <div className="w-3 h-3 bg-primary rounded-full shadow-glow animate-pulse"></div>
+                  <Users className="w-6 h-6 text-primary" />
                   <span className="text-lg">Gestão Multi-Lojas Unificada</span>
+                </div>
+                <div className="flex items-center gap-4 p-5 glass-premium rounded-xl hover-lift-premium">
+                  <div className="w-3 h-3 bg-primary rounded-full shadow-glow animate-pulse"></div>
+                  <TrendingUp className="w-6 h-6 text-primary" />
+                  <span className="text-lg">Relatórios Executivos Personalizados</span>
                 </div>
               </div>
 
               {/* AI Insight Display */}
               <div className="mt-8 p-4 glass-card rounded-xl border border-primary/30">
                 <div className="flex items-center gap-3 mb-2">
-                  <Sparkles className="w-5 h-5 text-primary animate-pulse" />
-                  <span className="text-sm font-medium text-primary">IA Assistant</span>
+                  <Sparkles className="w-5 h-5 text-primary animate-pulse-professional" />
+                  <span className="text-sm font-medium text-primary">Assistente IA</span>
                 </div>
                 <p className="text-sm text-muted-foreground animate-fade-in">
                   {aiInsight}
@@ -160,28 +196,28 @@ export function LoginForm() {
         </div>
       </div>
 
-      {/* Right Side - Premium Login Form */}
+      {/* Right Side - Professional Login Form */}
       <div className="flex-1 flex items-center justify-center p-8 gradient-elegant">
         <div className="w-full max-w-md animate-scale-in">
           <Card className="glass-premium shadow-elegant hover-lift-premium">
             <CardHeader className="text-center pb-8">
               <div className="flex justify-center mb-6 lg:hidden">
-                <div className="w-16 h-16 gradient-gold rounded-2xl flex items-center justify-center shadow-glow">
-                  <Crown className="w-9 h-9 text-primary-foreground" />
+                <div className="w-16 h-16 gradient-premium rounded-2xl flex items-center justify-center shadow-glow">
+                  <Building2 className="w-9 h-9 text-primary-foreground" />
                 </div>
               </div>
-              <CardTitle className="text-3xl font-bold text-gradient-gold mb-2">
-                Premium Access
+              <CardTitle className="text-3xl font-bold text-gradient-premium mb-2">
+                Acesso Enterprise
               </CardTitle>
               <p className="text-muted-foreground text-lg">
-                Entre em sua conta premium com IA
+                Entre em sua conta executiva
               </p>
             </CardHeader>
             
             <CardContent className="space-y-6">
               <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-3">
-                  <Label htmlFor="email" className="text-base font-medium">E-mail</Label>
+                  <Label htmlFor="email" className="text-base font-medium">E-mail Corporativo</Label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
@@ -189,7 +225,7 @@ export function LoginForm() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="seu@email.com"
+                      placeholder="seuemail@empresa.com"
                       className="pl-12 h-12 text-base glass-card border-primary/30 focus:border-primary focus:ring-primary/50"
                       required
                     />
@@ -219,33 +255,59 @@ export function LoginForm() {
                   </div>
                 </div>
 
-                {/* User Preferences */}
+                {/* Advanced Preferences */}
                 <div className="space-y-3">
-                  <Label className="text-base font-medium">Preferências</Label>
-                  <div className="space-y-3">
-                    <label className="flex items-center gap-3 cursor-pointer">
+                  <Label className="text-base font-medium">Preferências do Sistema</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={userPreferences.aiAssistance}
                         onChange={() => togglePreference('aiAssistance')}
                         className="w-4 h-4 text-primary bg-input border-border rounded focus:ring-primary"
                       />
-                      <span className="text-sm flex items-center gap-2">
-                        <Brain className="w-4 h-4 text-primary" />
-                        Ativar Assistente IA
+                      <span className="text-sm flex items-center gap-1">
+                        <Brain className="w-3 h-3 text-primary" />
+                        IA
                       </span>
                     </label>
                     
-                    <label className="flex items-center gap-3 cursor-pointer">
+                    <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={userPreferences.notifications}
                         onChange={() => togglePreference('notifications')}
                         className="w-4 h-4 text-primary bg-input border-border rounded focus:ring-primary"
                       />
-                      <span className="text-sm flex items-center gap-2">
-                        <Shield className="w-4 h-4 text-primary" />
-                        Notificações Inteligentes
+                      <span className="text-sm flex items-center gap-1">
+                        <Shield className="w-3 h-3 text-primary" />
+                        Alertas
+                      </span>
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={userPreferences.analytics}
+                        onChange={() => togglePreference('analytics')}
+                        className="w-4 h-4 text-primary bg-input border-border rounded focus:ring-primary"
+                      />
+                      <span className="text-sm flex items-center gap-1">
+                        <BarChart3 className="w-3 h-3 text-primary" />
+                        Analytics
+                      </span>
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={userPreferences.multiStore}
+                        onChange={() => togglePreference('multiStore')}
+                        className="w-4 h-4 text-primary bg-input border-border rounded focus:ring-primary"
+                      />
+                      <span className="text-sm flex items-center gap-1">
+                        <Store className="w-3 h-3 text-primary" />
+                        Multi-lojas
                       </span>
                     </label>
                   </div>
@@ -253,7 +315,8 @@ export function LoginForm() {
 
                 <Button
                   type="submit"
-                  className="w-full h-12 text-base font-semibold gradient-gold text-primary-foreground hover:opacity-90 shadow-glow hover:shadow-glow transition-all duration-300"
+                  className="w-full h-12 text-base font-semibold"
+                  variant="premium"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -264,7 +327,7 @@ export function LoginForm() {
                   ) : (
                     <div className="flex items-center gap-2">
                       <Star className="w-5 h-5" />
-                      Entrar Premium
+                      Acessar Sistema
                     </div>
                   )}
                 </Button>
@@ -293,23 +356,47 @@ export function LoginForm() {
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={() => handleOAuthLogin('Apple')}
+                    onClick={() => handleOAuthLogin('Microsoft')}
                     className="h-11 glass-card border-primary/30 hover:border-primary hover:bg-primary/10"
                   >
-                    Apple
+                    Microsoft
                   </Button>
                 </div>
               </div>
 
-              {/* Demo Credentials */}
+              {/* Demo Access */}
               <div className="mt-8 space-y-4">
+                <div className="text-center">
+                  <Button
+                    variant="ghost"
+                    onClick={handleDemoLogin}
+                    className="text-sm text-primary hover:text-primary-hover"
+                  >
+                    🚀 Acesso Demo Rápido
+                  </Button>
+                </div>
+                
                 <div className="text-center text-sm text-muted-foreground">
-                  <p className="mb-3 font-medium">🚀 Credenciais de demonstração:</p>
                   <div className="space-y-2 text-xs glass-card p-4 rounded-lg border border-primary/20">
                     <p><strong className="text-primary">E-mail:</strong> demo@tiresaas.com</p>
                     <p><strong className="text-primary">Senha:</strong> demo123</p>
+                    <p className="text-xs opacity-75">Ou admin@tiresaas.com para acesso administrativo</p>
                   </div>
                 </div>
+              </div>
+
+              {/* Additional Features Info */}
+              <div className="mt-6 p-4 glass-card rounded-lg border border-primary/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-medium text-primary">Sistema Enterprise</span>
+                </div>
+                <ul className="text-xs text-muted-foreground space-y-1">
+                  <li>• Segurança bancária e criptografia end-to-end</li>
+                  <li>• Backup automático e sincronização em nuvem</li>
+                  <li>• Suporte 24/7 e treinamento especializado</li>
+                  <li>• Integração com ERPs e sistemas existentes</li>
+                </ul>
               </div>
             </CardContent>
           </Card>
